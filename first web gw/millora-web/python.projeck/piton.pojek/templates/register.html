@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Register - Millora</title>
+
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, Helvetica, sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #ffd900, #ff0000);
+        }
+
+        .register-box {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            padding: 40px;
+            border-radius: 20px;
+            width: 300px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        h2 {
+            margin-bottom: 20px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 10px;
+            outline: none;
+        }
+
+        /* 🔴 TOMBOL SAMA PERSIS */
+        button {
+            width: 100%;
+            padding: 12px;
+            margin-top: 15px;
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(135deg, #ff2f00, #ffea00);
+            color: white;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px rgb(0, 0, 0);
+            background: linear-gradient(135deg, #ff2ebd, #ff7ae9);
+        }
+
+        a {
+            color: black;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        p {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        /* 😎 KARAKTER (SAMA) */
+        .character {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            perspective: 500px;
+        }
+
+        .face {
+            width: 110px;
+            height: 110px;
+            background: radial-gradient(circle at 30% 30%, #fff176, #ff6f00);
+            border-radius: 50%;
+            position: relative;
+            box-shadow:
+                inset -10px -10px 20px rgba(0,0,0,0.3),
+                inset 10px 10px 20px rgba(255,255,255,0.5),
+                0 15px 30px rgba(0,0,0,0.4);
+            transition: transform 0.1s;
+        }
+
+        .eye {
+            width: 26px;
+            height: 26px;
+            background: white;
+            border-radius: 50%;
+            position: absolute;
+            top: 35px;
+            overflow: hidden;
+        }
+
+        .eye.left { left: 20px; }
+        .eye.right { right: 20px; }
+
+        .pupil {
+            width: 10px;
+            height: 10px;
+            background: black;
+            border-radius: 50%;
+            position: absolute;
+            top: 8px;
+            left: 8px;
+        }
+
+        .mouth {
+            width: 40px;
+            height: 20px;
+            border-bottom: 3px solid black;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="register-box">
+    <h2>Register Millora</h2>
+
+    <form action="/register" method="POST">
+        <input type="email" name="email" placeholder="Email" required>
+        <input type="password" name="password" placeholder="Password" required>
+        <button type="submit">Register</button>
+    </form>
+
+    <p>Sudah punya akun? <a href="/">Login</a></p>
+</div>
+
+<!-- 😎 KARAKTER -->
+<div class="character">
+    <div class="face" id="face">
+        <div class="eye left"><div class="pupil"></div></div>
+        <div class="eye right"><div class="pupil"></div></div>
+        <div class="mouth"></div>
+    </div>
+</div>
+
+<script>
+const pupils = document.querySelectorAll(".pupil");
+const face = document.getElementById("face");
+
+document.addEventListener("mousemove", (e) => {
+
+    // 👀 mata ngikutin
+    pupils.forEach(pupil => {
+        const rect = pupil.parentElement.getBoundingClientRect();
+
+        const eyeX = rect.left + rect.width / 2;
+        const eyeY = rect.top + rect.height / 2;
+
+        const angle = Math.atan2(e.clientY - eyeY, e.clientX - eyeX);
+
+        const x = Math.cos(angle) * 6;
+        const y = Math.sin(angle) * 6;
+
+        pupil.style.transform = `translate(${x}px, ${y}px)`;
+    });
+
+    // 🔥 efek 3D kepala
+    const x = (e.clientX / window.innerWidth - 0.5) * 20;
+    const y = (e.clientY / window.innerHeight - 0.5) * 20;
+
+    face.style.transform = `rotateY(${x}deg) rotateX(${-y}deg)`;
+});
+</script>
+
+</body>
+</html>
